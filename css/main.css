@@ -1,0 +1,288 @@
+body {
+	min-width: 654px;      /* 2x LC width + RC width */
+
+}
+
+
+/**********************************************/
+#template-banner-container{
+	clear: both;
+	float: left;
+	width: 100%;
+	height: 56px;
+	
+	position: relative;
+	left: 0;
+
+	min-width: 654px;
+	background: #54CE06;
+	/*padding-left: 202px; */  /* LC width */
+	/* padding-right: 250px; */ /* RC width */
+	/* border: 1px dotted red;*/
+}
+
+
+*.banner_column {
+	/*float: left;*/
+	/*position: absolute;*/
+	/*background: limegreen;*/
+}
+
+/*--------------------------------*/
+
+#template-banner-center { 
+	position: absolute;
+	left: 35%;
+	right: 50%;
+}
+#error-console { 
+/* 	display: block; */
+	display: none;
+	background: #CCCCCC;
+	color: #FF0000;
+    border:1px solid #999999;
+    width:100%;
+	height: 60px;
+    margin:5px 5px;
+    padding:5px;
+	overflow-y: auto;
+}
+
+/*--------------------------------*/
+#template-banner-user { 
+	position: absolute;
+	right: 0;
+	/*left: 75%;*/
+
+	/*width: 250px;*/          /* RC width */
+	/*margin-right: -250px; */ /* RC width */
+	/*margin-right: 10px; */
+	color: blue;
+	/*border: 1px dotted magenta;*/
+	/*background: limegreen;*/
+	/*text-align: right;*/
+}
+#template-banner-user ul {
+	display: inline;	
+	list-style-type: none;
+	border: 1px dotted blue;	
+	
+	padding-left: 0;
+	/*text-align: right;*/
+}
+#template-banner-user li {
+	display: inline;
+	list-style-type: none;
+	vertical-align: text-top;
+	font-size: 8px; font-family: arial;
+	margin-right: 5px;
+}
+/*--------------------------------*/
+#template-banner-logo { 
+	position: absolute;
+	left: 0;
+	margin: 0;
+	/*right: 45%;*/
+	/*width: 198px;*/          /* LC width */
+	/*right: 200px;  */        /* LC width */
+	/*margin-left: -100%;*/
+	color: #7A0064; 
+	font-weight: bold; font-size: 50px; font-family: arial; 
+	/*background: limegreen;*/
+	/*border: 1px solid yellow;*/
+	/*text-decoration: none;*/
+}
+#template-banner-logo-image { 
+	vertical-align: top;
+	border: 0;
+	margin: 0;
+	padding: 0;
+}
+
+/**********************************************/
+#template-footer {
+	clear: both; 
+	text-align: center; 
+	background: #54CE06;
+}
+#template-footer li{
+	display: inline;
+	list-style-type: none;
+	padding-right: 20px;
+}
+.error-msg { text-align: center; color: red;}
+
+/**********************************************/
+/* Container layout from http://www.alistapart.com/articles/holygrail */
+#main-container {
+	padding-left: 10px;   /* LC width */
+	padding-right: 10px;  /* RC width */
+	clear: both;
+	min-height: 200px;
+	background: transparent;
+
+	-moz-user-select: none; /* prevents default text selection highlight */
+	-webkit-user-select: none;
+}
+#main-container .column {
+	position: relative;
+	float: left;
+}
+
+/*--------------------------------*/
+#svg-container-left{
+	width: 50%;
+	display: block;
+}
+#svg-container-right{
+	width: 50%;
+	display: block;
+}
+#view-default-container   xlist {
+	padding-left: 1em;
+}
+ 
+#view-default-container   contents {
+ 	display: block;	 
+	margin-left: 1em;
+}
+ 
+ #view-default-container widget.w-list-name {
+ 	display: list-item; 
+	list-style: none;
+	list-style-position: inside;
+	margin-left: 0.5em;
+}
+
+#view-default-container widget.w-list-name name {
+	margin-left: 10px;
+	color: grey;
+	font-size: 10px; 
+	padding-right: 0.5em;
+}
+#view-default-container widget.w-item-name {
+	display: list-item; 
+	list-style: none;
+	list-style-position: inside;
+	margin-left: 10px;
+	color: black;
+	font-weight: bold; 
+	font-size: 15px; 
+}
+#view-default-container widget.w-item-name  name {
+	padding-left: 0.5em;
+}
+#view-default-container widget.w-inlist-new-item {
+	font-style: italic;
+	color: blue;
+	margin-left: 10px;
+	padding: 5px;
+	border: 1px solid;
+}
+
+/*--------------------------------*/
+/* Navbar from http://css.maxdesign.com.au/listamatic2/vertical07.htm */
+#navbar-container { 
+	width: 199px;          /* LC width */
+	right: 200px;          /* LC width */
+	margin-left: -100%;
+	
+	border-top: 1px solid #aaa;
+	border-bottom: 1px solid #aaa;
+	border-left: 1px solid #aaa;
+	border-right: 1px solid #aaa;
+	font-family: arial; 
+}
+
+#navbar-container   contents {
+	margin-left: 10px;
+}
+
+ #navbar-container widget.w-list-name {
+ 	display: list-item;
+	list-style: none;
+	list-style-position: inside;
+	margin-left: 10px;
+	color: black;
+	font-weight: bold; 
+	font-size: 15px; 
+}
+#navbar-container widget.w-list-name name {
+	padding-left: 0.25em;
+	padding-right: 0.25em;
+}
+/*
+#navbar-container item-name-elt {
+	display: none;
+	display: list-item;
+	list-style: none;
+	list-style-position: inside;
+	margin-left: 10px;
+	font-size: 10px; 
+	color: black;
+}
+#navbar-container item-name {
+	padding-left: 1em;
+}
+*/
+list[expandstate="1"] > contents {
+	display: block;
+
+}
+/* If not in expand state, then hide */
+list  > contents {
+	display: none;
+}
+
+/*--------------------*/
+list[selected="1"] > widget.w-list-name {
+	background-color: #CCFFCC;
+}
+
+/*--------------------*/
+item[selected="1"] > widget.w-item-name {
+	background-color: #CCFFCC;
+}
+
+list [transaction-status="pending"] > * {
+	background-color: #ffff99; /* Scriptaculous def (light-yellow) */
+}
+item[transaction-status="pending"] > * {
+	background-color: #ffff99; /* Scriptaculous def (light-yellow) */
+}
+list [transaction-status="failed"] > * {
+	background-color: #ff6666;
+}
+item[transaction-status="failed"] > * {
+	background-color: #ff6666;
+}
+
+/*--------------------------------*/
+#ad-container {
+	width: 150px;          /* RC width */
+	margin-right: -150px;  /* RC width */
+}
+#ad-container p {
+	width: auto;
+	font-weight: bold;
+	font-style: italic;
+	font-size: large;
+	text-align: center;
+	border: 1px solid red;
+	margin: 1px;
+
+}
+/*--------------------------------*/
+#view-record-detail {
+ 	position: relative;	
+	clear: both;
+	height: 90px;
+    margin:5px 5px;
+    padding-right:20px;
+	border: 1px solid #ddd;
+}
+#view-record-detail path {
+	display:inline-block; 
+	color: limegreen; 
+	/*width: 15em;*/
+}

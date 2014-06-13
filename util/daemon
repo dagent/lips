@@ -1,0 +1,80 @@
+#! /bin/bash
+
+# Start/stop the main node process
+# Author: David A. Gent (June 2014)
+
+export NODE_PATH="$NODE_PATH:/usr/local/lib/node_modules"
+
+set -e
+
+progn=`basename $0`
+logf="/tmp/$progn.log"
+pidf="/tmp/$progn.pid"
+#wd="/Users/gent/github/lips"   # mac
+wd="/home/gent/github/lips"   # linux
+node_cmd="RunNode.js"
+
+cd $wd
+export PATH="$PATH:$wd:$wd/util"
+
+start() {
+    if [ -f $pidf ] ; then 
+        echo
+        echo -n "$pidf: Already running with PID "; cat $pidf; echo
+        exit
+    fi
+
+    echo "Starting $node_cmd with logging to $logf"
+    date >> $logf
+    $node_cmd 2>>$logf &
+    cpid=$!
+    if [ $? -eq 0 ] ; then
+        echo $cpid > $pidf
+        echo -n "$node_cmd now running with PID "; cat $pidf; echo
+    else
+        echo "Failure to start $node_cmd"
+    fi
+}
+
+status() {
+    if [ -f $pidf ] ; then 
+        pid=`cat $pidf`
+        if ps -p $pid  ; then
+            echo "Running with PID $pid"
+        fi
+    else
+        echo "Not running"
+    fi
+}
+
+stop() {
+    if [ -f $pidf ] ; then 
+        pid=`cat $pidf`
+        kill $pid || true
+        echo "Stopped"
+        rm $pidf
+    else
+        echo "Not running"
+    fi
+}
+
+case $1 in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status
+        ;;
+    restart)
+        stop
+        sleep 1
+        start
+        ;;
+    *)
+        echo
+        echo "Usage: $progn [start|stop|restart|status]" 
+        echo
+esac

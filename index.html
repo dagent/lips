@@ -1,0 +1,168 @@
+
+<html lang="en">
+<head>
+<title>Lips!</title>
+
+    <meta name="author" content="David A. Gent" />
+    <meta name="description" content="lipsyncing prototype" />
+    <meta name="revised" content="June 2014" />
+    <meta name="keywords" content="Node.js WebSocket TTS (text-to-speech)" />
+
+    <script src="jsext/NodeEventHandlers.js" type="text/javascript"></script>
+
+    <link rel="stylesheet" type="text/css" href="/css/logger.css" media="all" />
+    <script src="/jsext/logger.js" type="text/javascript"></script>
+    <script src="/jsext/date.format.js" type="text/javascript"></script>
+
+
+    <style>
+        img.hidden {
+            visibility: hidden;
+            z-index: -1;
+        }
+        img.flot {
+            /*border: 1px solid black;*/
+            position: absolute;
+            top: 230;
+            left: 130;
+            z-index: -1;
+        }
+        img.visible {
+            visibility: visible;
+            z-index: +1;
+        }
+        .center {
+            margin: auto;
+            /*background-color: #5a564d;*/
+            width: 60%;
+            position: relative;
+            border: 1px solid black;
+        }
+
+    </style>
+
+</head>
+
+<body onload="docStart();" >
+<div class="center" >
+
+    <div id="face" style="height:540;"
+        onclick="displayNextLip();"
+    >
+    <img class="visible"
+        style="position:absolute;top:00;left:50;width:460;z-index: +5;"
+        src="lips/sketch_eyes.svg">
+    <img class="visible"
+        style="position:absolute;top:140;left:190;width:180;z-index: +5;"
+        src="lips/Nose_clip_art_medium.png">
+    <img class="visible flot" id="lip00" src="lips/blair_rest.jpg">
+    <img class="hidden flot" id="lip01" src="lips/blair_a_i.jpg">
+    <img class="hidden flot" id="lip02" src="lips/blair_c_d_g_k_n_r_s_th_y_z.jpg">
+    <img class="hidden flot" id="lip03" src="lips/blair_e.jpg">
+    <img class="hidden flot" id="lip04" src="lips/blair_f_v_d_th.jpg">
+    <img class="hidden flot" id="lip05" src="lips/blair_l_d_th.jpg">
+    <img class="hidden flot" id="lip06" src="lips/blair_m_b_p.jpg">
+    <img class="hidden flot" id="lip07" src="lips/blair_o.jpg">
+    <img class="hidden flot" id="lip08" src="lips/blair_u.jpg">
+    <img class="hidden flot" id="lip09" src="lips/blair_w_q.jpg">
+    </div>
+</div>
+
+<div class="center">
+<input type="text" size="3" id="input" onchange="inputLip(value);" >
+<span id="lip_num"></span>
+</div>
+
+<script>
+
+var lips = [ "lip00", "lip01", "lip02", "lip03", "lip04", "lip05", 
+            "lip06", "lip07", "lip08", "lip09"];
+var i_lip= 0;
+var lipNum = document.getElementById("lip_num");
+
+function displayNextLip () {
+    var lipCurrent = document.getElementById(lips[i_lip]);
+    i_lip++;
+    if ( i_lip >= lips.length ) {
+        i_lip = 0;
+    }
+    var lipNext = document.getElementById(lips[i_lip]);
+    lipCurrent.style.visibility = "hidden";   
+    lipCurrent.style.zIndex = "-1";   
+    lipNext.style.visibility = "visible";   
+    lipNext.style.zIndex = "1";   
+    lipNum.innerHTML = i_lip;
+}
+
+function displayLip (j_lip) {
+    console.log("j_lip = ", j_lip);
+    if ( j_lip >= lips.length || j_lip < 0 || isNaN(j_lip) ) {
+        console.log("j_lip out of bounds; set to 0");
+        j_lip = 0;
+    }
+    var lipCurrent = document.getElementById(lips[i_lip]);
+    var lipNew = document.getElementById(lips[j_lip]);
+    lipCurrent.style.visibility = "hidden";   
+    lipCurrent.style.zIndex = "-1";   
+    lipNew.style.visibility = "visible";   
+    lipNew.style.zIndex = "1";   
+    i_lip = j_lip;
+    if ( i_lip >= lips.length ) {
+        i_lip = 0;
+    }
+    lipNum.innerHTML = j_lip;
+}
+function inputLip (j_lip) {
+    var input = document.getElementById("input");
+    displayLip(j_lip);
+    input.select();
+}
+
+// Code re-use!  meter["left"] is now a lip
+
+function updateMetersVal (height, meter) {
+    if ( meter === "left" ) {
+        debug("got left");
+        displayLip(height.trim());
+    }
+}
+
+function docStart() {
+    createES("left");
+    divESstate["left"] = document.getElementById("websocketerror_left");
+}
+
+</script>
+
+<div style="background-color:#00A5FF;clear:both;text-align:center; font-size:10px;">
+    <span id="websocketerror_left"></span>
+</div>
+
+<div id="fvlogger" class="center" >
+    <dl>
+        <dt>fvlogger</dt>
+        <dd class="all"><a href="#fvlogger" onclick="showAll();" title="show all" id="abcdef">all</a></dd>
+        <dd class="debug"><a href="#fvlogger" onclick="showDebug();" title="show debug" id="showDebug">debug</a></dd>
+        <dd class="info"><a href="#fvlogger"  onclick="showInfo();" title="show info" id="showInfo">info</a></dd>
+        <dd class="warn"><a href="#fvlogger" onclick="showWarn();" title="show warnings" id="showWarn">warn</a></dd>
+        <dd class="error"><a href="#fvlogger" onclick="showError();" title="show errors" id="showError">error</a></dd>
+        <dd class="fatal"><a href="#fvlogger" onclick="showFatal();" title="show fatals" id="showFatal">fatal</a></dd>
+        <dd><a href="#fvlogger" onclick="eraseLog(true);" title="erase">erase</a></dd>
+    </dl>
+    <div id="fvlogger-entries" > </div>  
+</div>
+
+
+<div id="attribution"
+    style="font-size: 8px; font-style: italic; text-align: left">
+    David A. Gent<br/>
+    2014<br/>
+    Image Credit: <a href="http://vector.me/browse/334120/sketch_eyes" title="Sketch Eyes" target="_blank">Sketch Eyes</a> from <a href="http://www.vector.me" title="vector.me" target="_blank">vector.me</a> (by naoshika) <br/>
+    Image Credit: <a href="http://vector.me/browse/139339/nose_clip_art" title="Nose Clip Art" target="_blank">Nose Clip Art</a> from <a href="http://vector.me/" title="Vector.me" target="_blank">Vector.me</a></br>
+    Image Credit: <a href="http://www.garycmartin.com/mouth_shapes.html">Preston Blair phoneme series</a> (by Gary C. Martin)
+
+</div>
+
+</body>
+</html>
+

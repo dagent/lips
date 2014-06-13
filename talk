@@ -1,0 +1,17 @@
+#! /bin/bash
+
+# Start up the "doit" program for espeak
+
+set -e
+
+progn=`basename $0`
+#wd="/Users/gent/github/lips"   #mac
+wd="/home/gent/github/lips"   #linux
+ncport="7331"
+nchost="localhost"
+
+export PATH="$PATH:$wd:$wd/espeak"
+
+cd $wd/espeak
+
+./doit "$@" | nc localhost 7331

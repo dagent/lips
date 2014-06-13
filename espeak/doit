@@ -1,0 +1,172 @@
+#! /usr/bin/perl
+# Espeak wrapper to extract visemes -- see usage() below.
+# Author: David A. Gent
+# June 2014
+
+$wpm = 80; # slowest espeak words-per-minute; settable with -s option
+$wpause = 800; # Milisecond delay between outputting words to espeach
+chomp ($PROGNAME = `basename $0`);
+sub usage () {
+    print STDERR <<"+++EOF+++";
+
+    usage: $PROGNAME [-w words-per-second] [-p delay] [-D] [-h]
+
+    $PROGNAME Starts espeak to accept STDIN for text-to-speak.
+
+        Phonemes are mapped to visemes.  Speach is done one word at a
+        time at spoken rate (-w) with a pause (-p) between them
+
+        Defaults: $wpm word-per-minute spoken and $wpause milli-seconds
+        between words;
+
++++EOF+++
+    ;
+    exit;
+}
+
+$DEBUG = 0;
+select STDERR;
+$| = 1;
+select STDOUT;
+$| = 1;
+
+use Getopt::Std;
+use Getopt::Long;
+Getopt::Long::Configure("gnu_compat");
+
+GetOptions (
+'debug|D' => \$DEBUG,
+'help|h' => \$help,
+'wpm|w=i' => \$wpm, # Words per minute
+'delay|p=i' => \$wpause, # delay between words (milliseconds).
+);
+
+if ( $help ) {
+    usage();
+}
+
+if ( $DEBUG =~ /^$/ ) {
+    # DEBUG defaults to 0, so this means that there was an option to
+    # set it
+    $DEBUG = 1;
+} 
+
+sub pd {
+    if ($DEBUG) {
+        my $errmsg = join " ", @_;
+        print STDERR "### $errmsg\n";
+    }
+}
+
+$speak_cmd = "/usr/bin/espeak";
+#$speak_options = "-s".$wpm." -p1 -ven-us+m7 -x";
+$speak_options = "-s".$wpm." -p1 -ven-us -x";
+
+# phoneme/visemes exist here
+do "phoneme-viseme.pl";
+#%pho_vis_hash = %{mk_phoneme_viseme_hash(\%viseme22, \%espeak_phoneme)};
+%pho_vis_hash = %{mk_phoneme_viseme_hash(\%viseme10, \%espeak_phoneme)};
+pd("%pho_vis_hash =", keys %pho_vis_hash, values %pho_vis_hash );
+
+# return arrays of phoneme and viseme values currently inputed.
+# : matchit(\%phoneme_viseme_hash, $match_string)
+# returns references to arrays of matched keys and values
+sub matchit {
+    my %mhash = %{$_[0]} ;
+    my $mstring = $_[1] ;
+    my $mre = "(" . join('|', reverse sort(keys(%mhash) )) . ")";
+    #pd ('$regexp="' . $mre . '"');
+    #pd ('$mstring="' . $mstring . '"' , "length=" . length($mstring));
+    my $mkeys = [];
+    my $mvals = [];
+    my $mkey;
+    while ( "$mstring" !~ /^$/ ) {
+        if ( $mstring =~  /^$mre/ ) {
+            $mkey = $1;
+            #pd ('$mkey="' . $mkey . '"' );
+            push @{$mkeys}, $mkey;
+            push @{$mvals}, $mhash{$mkey};
+            $mstring = substr($mstring,length($mkey));
+        } else {
+            $mstring = substr($mstring,1);
+        }
+
+        #pd ('$mstring="' . $mstring . '"' , "length=" . length($mstring));
+    }
+    return ($mkeys, $mvals);
+}
+
+# Wrap the espeak command in a PTY (via socat), since the output is
+# buffered when piped!
+$speak = "/usr/bin/socat EXEC:" . "\"$speak_cmd $speak_options\"" .
+    ",pty,echo=0,raw,ctty STDIO";
+
+use IPC::Open3;
+use IO::Select;
+
+pd "wpm set to $wpm";
+pd "Executing: $speak";
+pd "Word pause set to $wpause milliseconds";
+my $pid = open3(\*WRITE, \*READ,\*ERROR,"$speak") || die "$!";
+
+my $sel = new IO::Select();
+
+$sel->add(\*READ);
+$sel->add(\*ERROR);
+
+print STDERR "\nEnter text\n";
+print "0\n";
+while( chomp(my $query = <STDIN>) ){
+
+    chomp $query;
+    $query =~ s/^\s+//;
+    my @query = split /\s+/, $query;
+ 
+    foreach my $say ( @query ) {
+        #send text to espeak
+        pd ("Say '$say'.");
+        print WRITE "$say\n";
+        foreach my $h ($sel->can_read()) {
+            #pd("Input buffer found");
+            my $buf = '';
+            if ($h eq \*ERROR) {
+                sysread(ERROR,$buf,4096);
+                if($buf){
+                    pd("ERROR-> $buf");
+                }
+            } else {
+                sysread(READ,$buf,4096);
+                chomp $buf;
+                if($buf){pd "$say = $buf"}
+                ($matches,$mvals) = matchit(\%pho_vis_hash, $buf);
+                next if $#{$matches} < 0;
+                pd ('@matches =[' , join(", ", @{$matches}), ']' );
+                pd ('@mvals =[' , join(", ", @{$mvals}), ']' );
+                visemeOut($mvals);
+            }
+        }
+         #pause
+        select(undef,undef,undef,($wpause/1000));
+    }
+    select(undef,undef,undef,($wpause/1000));
+    print STDERR "\nEnter text\n";
+
+}
+
+# pass viseme hash to stdout formatted for ??
+sub visemeOut () {
+    my @mvals = @{$_[0]};
+    pd "$#mvals";
+    my $wait = (60/$wpm)/( $#mvals + 1 );
+    foreach my $mval (@mvals) {
+        print "$mval\n";
+        pd ("pausing for $wait seconds");
+        select(undef,undef,undef,$wait);
+    }
+    print "0\n";
+}
+
+
+#  zombie prevention 
+waitpid($pid, 1);
+

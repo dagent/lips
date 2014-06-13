@@ -1,0 +1,107 @@
+/*
+  fvlogger styles
+  (c) 2005 davidfmiller
+  http://www.fivevoltlogic.com/code/fvlogger/
+
+  note: this stylesheet is designed to work with the stock configuration of
+        the fvlogger.js file; changes made there may or may not lead to
+        changing this file as well.
+
+  history:
+        v0.1  February 3, 2005
+        - basics in place
+*/
+
+#fvlogger {
+ 	position: relative;	
+	clear: both;
+	width:98%;
+	height: 90px;
+    margin:5px 5px;
+    padding:5px;
+	border: 1px solid #ddd;
+}
+
+#fvlogger * {
+	background-repeat: no-repeat;	
+	font-size: 10pt;
+/* 	text-transform: lowercase; */
+}
+
+#fvlogger-entries {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	height: 80px;
+ 	width: 100%;
+	background-color: #CCCCCC;
+	overflow-y: auto;
+}
+
+#fvlogger h6 {
+	font-weight: bold;
+}
+
+#fvlogger-entries  p, #fvlogger-entries  h6, #fvlogger-entries  ul {
+	margin: 0;
+	padding: 0;
+	text-align: left;
+}
+
+#fvlogger dl {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	margin-top: 0;
+	padding-top: 0;
+	padding-bottom: 4px;
+	border-bottom: 1px solid #eee;
+	margin-bottom: 4px;
+	background-color: #666666;
+
+}
+
+#fvlogger dl dt:after {
+	content: " :";
+}
+
+#fvlogger dl dt, #fvlogger dl dd {
+	padding: 0;
+	margin: 0 4px 0 0;
+	display: inline;
+}
+
+#fvlogger dl dt {
+	font-weight: bold;
+	min-height: 18px;
+	padding-left: 20px;
+	float: left;
+}
+
+#fvlogger dl dd {
+
+}
+
+#fvlogger-entries  a {}
+#fvlogger-entries  p {
+	padding-left: 10px;
+	background-position: top left;
+	line-height: 1.4em;
+}
+
+#fvlogger dd.debug a { color: #0CCD14; }
+#fvlogger dd.info  a { color: #0082C6; }
+#fvlogger dd.warn  a { color: #E9C000; }
+#fvlogger dd.error a { color: #EE0000; }
+#fvlogger dd.fatal a { color: #444; }
+
+#fvlogger p.debug, #fvlogger p.info, #fvlogger p.warn, #fvlogger p.error {
+	
+}
+
+#fvlogger p.debug { color: #0CCD14; }
+#fvlogger p.info  { color: #0066B3; }
+#fvlogger p.warn  { color: #E9C000;  }
+#fvlogger p.error { color: #EE0000; }
+#fvlogger p.fatal { color: #656565; }

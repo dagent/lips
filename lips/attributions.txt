@@ -1,0 +1,16 @@
+
+Images in this directory have been gathered from various corners of the
+Internet, as I'm a horrible visual artist.  As such, these are only to
+be used for proto-typing purposes.
+
+blair*.jpg -- the viseme/lip files come from
+    http://www.garycmartin.com/mouth_shapes.html
+    and I fully intend to inform him of this use.
+
+sketch_eyes.svg -- from
+    http://vector.me/files/download/1402671100.puc3dwdt/sketch_eyes.zip
+
+
+Nose_clip_art_medium.png -- from
+    http://vector.me/files/download/1402669308.yxpg4mju/nose_clip_art.zip
+

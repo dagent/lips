@@ -1,0 +1,3 @@
+#! /bin/bash
+
+./pa | ./vu -n 100 | nc localhost 7332

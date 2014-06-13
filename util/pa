@@ -1,0 +1,14 @@
+#! /bin/bash
+
+# Listen to the microphone (works on DG's box bilbao)
+
+paCmd="parec \
+--format=s16le \
+--channels=1 \
+--channel-map=mono \
+--rate=48000 \
+--latency-msec=200 \
+--raw "
+
+echo "Running $paCmd " >&2
+$paCmd 
